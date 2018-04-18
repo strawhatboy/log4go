@@ -12,10 +12,8 @@ func LOGGER(category string) *Filter {
 	f, ok := Global[category]
 	if !ok {
 		f = Global["stdout"]
-		f.Category = "DEFAULT"
-	} else {
-		f.Category = category
-	}
+	} 
+	f.Category = category
 	return f
 }
 
