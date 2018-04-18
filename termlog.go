@@ -7,9 +7,19 @@ import (
 	"io"
 	"os"
 	"time"
+	"github.com/fatih/color"
 )
 
 var stdout io.Writer = os.Stdout
+
+var (
+	debugColor func(a ...interface{}) string
+	traceColor func(a ...interface{}) string
+	infoColor func(a ...interface{}) string
+	warnColor func(a ...interface{}) string
+	errorColor func(a ...interface{}) string
+	criticalColor func(a ...interface{}) string
+)
 
 // This is the standard writer that prints to standard output.
 type ConsoleLogWriter struct {
@@ -19,6 +29,14 @@ type ConsoleLogWriter struct {
 
 // This creates a new ConsoleLogWriter
 func NewConsoleLogWriter() *ConsoleLogWriter {
+	if (debugColor == nil) {
+		debugColor = color.New(color.FgCyan).SprintFunc()
+		traceColor = color.New(color.FgBlue).SprintFunc()
+		infoColor = color.New(color.FgMagenta).SprintFunc()
+		warnColor = color.New(color.FgYellow).SprintFunc()
+		errorColor = color.New(color.FgRed).SprintFunc()
+		criticalColor = color.New(color.FgHiRed).SprintFunc()
+	}
 	consoleWriter := &ConsoleLogWriter{
 		format: "[%T %D] [%C] [%L] (%S) %M",
 		w:      make(chan *LogRecord, LogBufferLength),
@@ -31,7 +49,30 @@ func (c *ConsoleLogWriter) SetFormat(format string) {
 }
 func (c *ConsoleLogWriter) run(out io.Writer) {
 	for rec := range c.w {
-		fmt.Fprint(out, FormatLogRecord(c.format, rec))
+		outString := FormatLogRecord(c.format, rec)
+		switch levelStrings[rec.Level] {
+		case "TRAC":
+			outString = traceColor(outString)
+			break;
+		case "DEBG":
+			outString = debugColor(outString)
+			break;
+		case "INFO":
+			//outString = infoColor(outString)
+			break;
+		case "WARN":
+			outString = warnColor(outString)
+			break;
+		case "EROR":
+			outString = errorColor(outString)
+			break;
+		case "CRIT":
+			outString = criticalColor(outString)
+			break;
+		default:
+			break;
+		}
+		fmt.Fprint(out, outString)
 	}
 }
 
