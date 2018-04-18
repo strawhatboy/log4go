@@ -106,7 +106,6 @@ type LogRecord struct {
 	Source   string    // The message source
 	Message  string    // The log message
 	Category string    // The log group
-	Name     string	   // The log name !!!
 }
 
 /****** LogWriter ******/
@@ -187,15 +186,6 @@ func (log Logger) AddFilter(name string, lvl Level, writer LogWriter, categorys 
 
 	log[name] = &Filter{lvl, writer, c}
 	return log
-}
-
-func (log Logger) GetLogger(name string) *Filter {
-	if filter, ok := log[name]; ok {
-		return filter
-	}
-	defaultLogger := LOGGER(name)
-	log[name] = &Filter{defaultLogger.Level, defaultLogger.LogWriter, name}
-	return log[name]
 }
 
 /******* Logging *******/
