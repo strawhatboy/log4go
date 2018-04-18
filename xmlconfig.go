@@ -127,7 +127,7 @@ func (log Logger) LoadConfiguration(filename string) {
 			continue
 		}
 
-		log[xmlfilt.Tag] = &Filter{lvl, filt, "DEFAULT"}
+		log[xmlfilt.Tag] = &Filter{lvl, filt, "DEFAULT", "DEFAULT"}
 	}
 }
 
