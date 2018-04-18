@@ -189,6 +189,15 @@ func (log Logger) AddFilter(name string, lvl Level, writer LogWriter, categorys 
 	return log
 }
 
+func (log Logger) GetLogger(name string) *Filter {
+	if filter, ok := log[name]; ok {
+		return filter
+	}
+	defaultLogger := LOGGER(name)
+	log[name] = &Filter{defaultLogger.Level, defaultLogger.LogWriter, name}
+	return log[name]
+}
+
 /******* Logging *******/
 // Send a formatted log message internally
 func (log Logger) intLogf(lvl Level, format string, args ...interface{}) {
