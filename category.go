@@ -12,11 +12,8 @@ func LOGGER(category string) *Filter {
 	f, ok := Global[category]
 	if !ok {
 		f = Global["stdout"]
-		f.Category = "DEFAULT"
-	} else {
-		f.Category = category
-	}
-	f.Name = category
+	} 
+	f.Category = category
 	return f
 }
 
@@ -50,7 +47,7 @@ func (f *Filter) intLogf(lvl Level, format string, args ...interface{}) {
 		Created:  time.Now(),
 		Source:   src,
 		Message:  msg,
-		Category: f.Name,
+		Category: f.Category,
 	}
 
 	// Dispatch the logs
@@ -98,7 +95,7 @@ func (f *Filter) intLogc(lvl Level, closure func() string) {
 		Created:  time.Now(),
 		Source:   src,
 		Message:  closure(),
-		Category: f.Name,
+		Category: f.Category,
 	}
 
 	default_filter := Global["stdout"]
@@ -130,7 +127,7 @@ func (f *Filter) Log(lvl Level, source, message string) {
 		Created:  time.Now(),
 		Source:   source,
 		Message:  message,
-		Category: f.Name,
+		Category: f.Category,
 	}
 
 	default_filter := Global["stdout"]

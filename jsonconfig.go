@@ -75,7 +75,7 @@ func (log Logger) LoadJsonConfiguration(filename string) {
 
 	if lc.Console.Enable {
 		filt, _ := jsonToConsoleLogWriter(filename, lc.Console)
-		log["stdout"] = &Filter{getLogLevel(lc.Console.Level), filt, "DEFAULT", "DEFAULT"}
+		log["stdout"] = &Filter{getLogLevel(lc.Console.Level), filt, "DEFAULT"}
 	}
 
 	for _, fc := range lc.Files {
@@ -88,7 +88,7 @@ func (log Logger) LoadJsonConfiguration(filename string) {
 		}
 
 		filt, _ := jsonToFileLogWriter(filename, fc)
-		log[fc.Category] = &Filter{getLogLevel(fc.Level), filt, fc.Category, fc.Category}
+		log[fc.Category] = &Filter{getLogLevel(fc.Level), filt, fc.Category}
 	}
 
 	for _, sc := range lc.Sockets {
@@ -101,7 +101,7 @@ func (log Logger) LoadJsonConfiguration(filename string) {
 		}
 
 		filt, _ := jsonToSocketLogWriter(filename, sc)
-		log[sc.Category] = &Filter{getLogLevel(sc.Level), filt, sc.Category, sc.Category}
+		log[sc.Category] = &Filter{getLogLevel(sc.Level), filt, sc.Category}
 	}
 
 }
